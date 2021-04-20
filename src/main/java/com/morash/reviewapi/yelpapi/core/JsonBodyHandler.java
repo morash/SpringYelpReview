@@ -1,4 +1,4 @@
-package com.morash.reviewapi.yelpapi;
+package com.morash.reviewapi.yelpapi.core;
 
 // Copied from https://github.com/mjg123/java-http-clients/blob/master/src/main/java/com/twilio/JsonBodyHandler.java
 

@@ -1,6 +1,8 @@
 package com.morash.reviewapi.yelpapi.response;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.morash.reviewapi.yelpapi.core.YelpApi;
+import com.morash.reviewapi.yelpapi.errors.YelpFusionApiException;
 
 public class BusinessDetails {
     public String id;
@@ -29,4 +31,10 @@ public class BusinessDetails {
     @JsonAlias("special_hours")
     public SpecialHours[] specialHours;
     public Messaging messaging;
+
+    public BusinessReviews getReviews() throws YelpFusionApiException {
+        YelpApi api = YelpApi.getInstance();
+
+        return api.getBusinessReviews(id);
+    }
 }

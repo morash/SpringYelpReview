@@ -1,11 +1,13 @@
 package com.morash.reviewapi;
 
-import com.morash.reviewapi.yelpapi.YelpApi;
+import com.morash.reviewapi.yelpapi.core.YelpApi;
+import com.morash.reviewapi.yelpapi.errors.YelpFusionApiException;
 import com.morash.reviewapi.yelpapi.response.BusinessReviews;
 import com.morash.reviewapi.yelpapi.response.BusinessDetails;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,8 +25,17 @@ public class YelpReviewApplication {
 		YelpApi api = YelpApi.getInstance();
 		EndpointResponse response = new EndpointResponse();
 
-		BusinessReviews yelpReviews = api.getBusinessReviews(BUSINESS_ID);
-		BusinessDetails yelpDetails = api.getBusinessDetails(BUSINESS_ID);
+		BusinessReviews yelpReviews = null;
+		BusinessDetails yelpDetails = null;
+		
+		try {
+			yelpDetails = api.getBusinessDetails(BUSINESS_ID);
+			yelpReviews = yelpDetails.getReviews();
+		} catch (YelpFusionApiException e) {
+			System.out.println("Error with request");
+			e.printStackTrace();
+			throw new ResourceNotFoundException();
+		}
 
 		response.reviews = new EndpointReview[yelpReviews.reviews.length];
 
